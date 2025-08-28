@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     }
 
     // Build prompt dynamically
-    let tasks: string[] = [];
+    const tasks: string[] = []; // ✅ changed from let → const
     if (options?.grammar) tasks.push("Fix grammar mistakes");
     if (options?.spacing) {
       tasks.push(
