@@ -9,15 +9,19 @@ const openai = new OpenAI({
 
 export async function POST(req: Request) {
   try {
-    const { text, options, tone } = await req.json();
+    const { text, options } = await req.json();
 
     if (!text) {
       return NextResponse.json({ error: "No text provided" }, { status: 400 });
     }
 
     // Build prompt dynamically
-    const tasks: string[] = []; // ✅ changed from let → const
+    const tasks: string[] = [];
+
+    // Grammar
     if (options?.grammar) tasks.push("Fix grammar mistakes");
+
+    // Spacing
     if (options?.spacing) {
       tasks.push(
         "Fix spacing so the tweet is readable. " +
@@ -27,29 +31,38 @@ export async function POST(req: Request) {
       );
     }
 
-    // Tone improvements → pick user choice
-    if (options?.tone && tone) {
-      if (tone === "professional")
+    // Tone handling
+    if (options?.tone && options.tone !== "none") {
+      if (options.tone === "professional")
         tasks.push("Rewrite in a professional, polished tone");
-      if (tone === "friendly")
-        tasks.push("Rewrite in a warm, friendly, approachable tone");
-      if (tone === "casual")
-        tasks.push("Rewrite in a casual, fun, engaging tone with light emojis");
+      if (options.tone === "casual")
+        tasks.push("Rewrite in a casual, fun, engaging tone");
+      if (options.tone === "hype")
+        tasks.push("Rewrite in a hype, marketing-friendly style with urgency");
     }
 
-    // Hashtags logic
+    // Emojis (new option)
+    if (options?.emojis) {
+      tasks.push("Add 2-4 relevant emojis naturally (do not overuse)");
+    } else {
+      tasks.push("Do NOT add any emojis");
+    }
+
+    // Hashtags
     if (options?.hashtags) {
-      tasks.push("Add 3-5 relevant trending hashtags");
+      tasks.push("Add 3-5 relevant trending hashtags at the end");
     } else {
       tasks.push("Do NOT add any hashtags");
     }
 
+    // Algo optimization
     if (options?.algo) {
       tasks.push(
-        "Optimize for Twitter algorithm (use emojis, concise style, and call-to-action)"
+        "Optimize for Twitter algorithm (concise style, engaging hook, strong call-to-action)"
       );
     }
 
+    // Final prompt
     const prompt = `
       You are a tweet optimization assistant.
       Given this tweet: "${text}"

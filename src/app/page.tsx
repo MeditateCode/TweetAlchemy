@@ -15,6 +15,7 @@ export default function Page() {
     hashtags: true,
     spacing: true,
     algo: true,
+    emojis: false, // ✅ new option
     tone: "none" as "none" | "professional" | "casual" | "hype",
   });
 
@@ -40,7 +41,6 @@ export default function Page() {
       const data = await res.json();
       const raw = data.optimized || "⚠️ Could not optimize tweet.";
 
-      // Display version = compact (remove multiple blank lines)
       const displayVersion = raw.replace(/\n{2,}/g, "\n");
 
       setOptimized(displayVersion);
@@ -170,6 +170,17 @@ export default function Page() {
                 <span className="text-gray-700">Algorithm Optimization</span>
               </label>
 
+              {/* Emojis ✅ */}
+              <label className="flex items-center space-x-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={options.emojis}
+                  onChange={() => toggleOption("emojis")}
+                  className="h-4 w-4 text-purple-600 rounded focus:ring-purple-500"
+                />
+                <span className="text-gray-700">Enhance with Emojis</span>
+              </label>
+
               {/* Tone Dropdown */}
               <div className="mt-4">
                 <label className="block text-gray-700 mb-1">Tone Style</label>
@@ -189,7 +200,6 @@ export default function Page() {
                   <option value="hype">Hype / Marketing</option>
                 </select>
               </div>
-
             </div>
 
             {/* Close Button */}
