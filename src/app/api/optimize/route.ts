@@ -50,7 +50,7 @@ export async function POST(req: Request) {
 
     // Hashtags
     if (options?.hashtags) {
-      tasks.push("Add 3-5 relevant trending hashtags at the end");
+      tasks.push("Add exactly 3 relevant trending hashtags at the end");
     } else {
       tasks.push("Do NOT add any hashtags");
     }

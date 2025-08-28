@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     siteName: "TweetAlchemy",
     images: [
       {
-        url: "/og-image.png", // 
+        url: "/PREVIEW-TWEETALCHEMY.png", // 
         width: 1200,
         height: 630,
         alt: "TweetAlchemy – AI Tweet Enhancer & Optimizer",
